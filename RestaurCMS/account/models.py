@@ -1,50 +1,39 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import (
+    AbstractBaseUser,
+    BaseUserManager,
+    PermissionsMixin,
+)
 
 
 class MyAccountManager(BaseUserManager):
+    """Manager for user."""
 
-    def create_user(
-        self, email, username, first_name, last_name, phone_number, password=None
-    ):
+    def create_user(self, email, username, password=None, **extra_fields):
+        """Create, save and return a new user."""
         if not email:
             raise ValueError("Users must have an email address")
-        if not username:
+        if not username or username.strip() == "":
             raise ValueError("Users must have a username")
-        # if not phone_number:
-        #     raise ValueError("Users must have a phone number")
+        if not password or password.strip() == "":
+            raise ValueError("Users must have a password")
 
-        user = self.model(
-            email=self.normalize_email(email),
-            username=username,
-            first_name=first_name,
-            last_name=last_name,
-            phone_number=phone_number,
-        )
-
+        email = self.normalize_email(email)
+        user = self.model(email=email, username=username, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(
-        self, email, username, first_name, last_name, phone_number, password
-    ):
-        user = self.create_user(
-            email,
-            username,
-            first_name,
-            last_name,
-            phone_number,
-            password,
-        )
-        user.is_admin = True
-        user.is_staff = True
-        user.is_superadmin = True
-        user.save(using=self._db)
-        return user
+    def create_superuser(self, email, username, password=None, **extra_fields):
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_superuser", True)
+
+        return self.create_user(email, username, password, **extra_fields)
 
 
-class CustomUser(AbstractBaseUser):
+class CustomUser(AbstractBaseUser, PermissionsMixin):
+    """User in the system."""
+
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     username = models.CharField(max_length=50, unique=True)
@@ -55,11 +44,11 @@ class CustomUser(AbstractBaseUser):
     last_login = models.DateTimeField(auto_now=True)
     is_admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
-    is_superadmin = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
+    is_superuser = models.BooleanField(default=False)
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["username", "first_name", "last_name", "phone_number"]
+    REQUIRED_FIELDS = ["username"]
 
     objects = MyAccountManager()
 

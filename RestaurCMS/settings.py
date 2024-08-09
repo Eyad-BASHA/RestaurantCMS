@@ -37,8 +37,14 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "RestaurCMS.category",  # Ensure this path is correct
+    "RestaurCMS.category",
     "RestaurCMS.account",
+    "RestaurCMS.user",
+    "rest_framework",
+    "rest_framework.authtoken",
+    # "django_filters",
+    # "corsheaders",
+    "drf_spectacular",
 ]
 
 
@@ -164,3 +170,8 @@ MEDIA_ROOT = BASE_DIR / "media"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}

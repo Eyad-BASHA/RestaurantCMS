@@ -1,9 +1,9 @@
 from django.contrib import admin
 from .models import CustomUser  # Make sure to import your CustomUser model
-from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
 
-class CustomUserAdmin(UserAdmin):
+class CustomUserAdmin(BaseUserAdmin):
     fieldsets = (
         (None, {"fields": ("email", "password")}),
         ("Personal info", {"fields": ("first_name", "last_name", "phone_number")}),
@@ -51,6 +51,4 @@ class CustomUserAdmin(UserAdmin):
     list_filter = ["is_staff", "is_active"]
 
 
-admin.site.register(
-    CustomUser, CustomUserAdmin
-)  # Register the model with the admin class
+admin.site.register(CustomUser, CustomUserAdmin)
