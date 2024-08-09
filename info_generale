@@ -1,0 +1,13 @@
+$ python3 -m venv venv
+$ source venv/bin/activate
+$ deactivate
+$ pip freeze 
+$ pip install django 
+$ django-admin startproject name .
+$ python3 manage.py collectstatic
+$ python manage.py startapp category
+$ python manage.py makemigrations
+$ python manage.py migrate
+$ python manage.py createsuperuser
+
+
