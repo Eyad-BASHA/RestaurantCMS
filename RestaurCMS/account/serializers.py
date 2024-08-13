@@ -69,3 +69,30 @@ class AuthTokenSerializer(serializers.Serializer):
 
         attrs["user"] = user
         return attrs
+
+
+class PasswordResetSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+    def validate_email(self, value):
+        """Validate that the email exists in the system"""
+        if not get_user_model().objects.filter(email=value).exists():
+            raise serializers.ValidationError(
+                "No user is associated with this email address."
+            )
+        return value
+
+    def save(self):
+        """Send password reset email"""
+        from django.core.mail import send_mail
+        from django.conf import settings
+
+        user = get_user_model().objects.get(email=self.validated_data["email"])
+        # Generate password reset token and send email
+        # This is a placeholder for actual implementation
+        send_mail(
+            "Password Reset",
+            "Here is the link to reset your password: <reset_link>",
+            settings.DEFAULT_FROM_EMAIL,
+            [user.email],
+        )

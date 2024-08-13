@@ -5,6 +5,8 @@ from django.contrib.auth.models import (
     PermissionsMixin,
 )
 
+from RestaurCMS.account.utils import send_activation_email
+
 
 class MyAccountManager(BaseUserManager):
     """Manager for user."""
@@ -19,9 +21,12 @@ class MyAccountManager(BaseUserManager):
             raise ValueError("Users must have a password")
 
         email = self.normalize_email(email)
-        user = self.model(email=email, username=username, **extra_fields)
+        user = self.model(
+            email=email, username=username, is_active=False, **extra_fields
+        )
         user.set_password(password)
         user.save(using=self._db)
+        send_activation_email(user)
         return user
 
     def create_superuser(self, email, username, password=None, **extra_fields):
