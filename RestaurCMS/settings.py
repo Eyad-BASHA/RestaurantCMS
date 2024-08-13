@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "RestaurCMS.category",
     "RestaurCMS.account",
-    "RestaurCMS.user",
+    # "RestaurCMS.user",
     "rest_framework",
     "rest_framework.authtoken",
     # "django_filters",

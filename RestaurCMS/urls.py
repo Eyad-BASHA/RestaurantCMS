@@ -38,6 +38,6 @@ urlpatterns = [
     ),
     path(
         "api/user/",
-        include("RestaurCMS.user.urls"),
+        include("RestaurCMS.account.urls"),
     ),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
