@@ -12,7 +12,9 @@ from django.contrib.auth.tokens import default_token_generator
 def send_activation_email(user):
     token = default_token_generator.make_token(user)
     uid = urlsafe_base64_encode(force_bytes(user.pk))
-    activation_link = reverse("activate", kwargs={"uidb64": uid, "token": token})
+    activation_link = reverse(
+        "account:activate", kwargs={"uidb64": uid, "token": token}
+    )  # Use 'account:activate' if app_name is 'account'
     activation_url = f"{settings.FRONTEND_URL}{activation_link}"
 
     subject = "Activate your account"
@@ -23,4 +25,6 @@ def send_activation_email(user):
             "activation_url": activation_url,
         },
     )
-    send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email])
+    send_mail(
+        subject, message, settings.DEFAULT_FROM_EMAIL, [user.email], fail_silently=False
+    )

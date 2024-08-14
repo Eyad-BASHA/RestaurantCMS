@@ -18,6 +18,10 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
+from django.shortcuts import render
+from django.core.exceptions import ObjectDoesNotExist
+from .models.profile_entity import Profile
+
 
 class CreateUserView(generics.CreateAPIView):
     """Create a new user in the system"""
@@ -73,3 +77,15 @@ class PasswordResetView(generics.GenericAPIView):
         return Response(
             {"detail": "Password reset email has been sent."}, status=status.HTTP_200_OK
         )
+
+
+def user_profile_view(request, user_id):
+    try:
+        profile = Profile.objects.get(user_id=user_id)
+    except ObjectDoesNotExist:
+        profile = None
+
+    context = {
+        "profile": profile,
+    }
+    return render(request, "user_profile.html", context)
