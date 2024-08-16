@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-f@lxrg%7$aqaf0z#=s10&e4#j5ydk4cu2u&l&xe9a@888de0nh"
+SECRET_KEY = "django-insecure-5b!025#4pd7+wh+v6k!&47g*_j$2$@iw6trl+t%7kqf*t8d0eh"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -32,50 +32,23 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "django_mptt_admin",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "RestaurCMS.category",
-    "RestaurCMS.account",
-    # "RestaurCMS.user",
+    "account",
+    "restaurant",
     "rest_framework",
     "rest_framework.authtoken",
     "rest_framework_simplejwt",
     # "django_filters",
     # "corsheaders",
     "drf_spectacular",
-    "django_mptt_admin",
+    "remise",
 ]
-
-
-# LOGGING = {
-#     "version": 1,
-#     "disable_existing_loggers": False,
-#     "handlers": {
-#         "console": {
-#             "class": "logging.StreamHandler",
-#         },
-#     },
-#     "loggers": {
-#         "django": {
-#             "handlers": ["console"],
-#             "level": "DEBUG",
-#         },
-#         "django.request": {
-#             "handlers": ["console"],
-#             "level": "DEBUG",
-#             "propagate": False,
-#         },
-#         "django.security": {
-#             "handlers": ["console"],
-#             "level": "DEBUG",
-#             "propagate": False,
-#         },
-#     },
-# }
 
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
@@ -101,8 +74,25 @@ SIMPLE_JWT = {
     "TOKEN_TYPE_CLAIM": "token_type",
 }
 
+# LOGGING = {
+#     "version": 1,
+#     "disable_existing_loggers": False,
+#     "handlers": {
+#         "console": {
+#             "level": "DEBUG",
+#             "class": "logging.StreamHandler",
+#         },
+#     },
+#     "loggers": {
+#         "django": {
+#             "handlers": ["console"],
+#             "level": "DEBUG",
+#         },
+#     },
+# }
+
 AUTHENTICATION_BACKENDS = [
-    "RestaurCMS.account.backendsAuth.EmailOrUsernameModelBackend",
+    "account.backendsAuth.EmailOrUsernameModelBackend",
     "django.contrib.auth.backends.ModelBackend",
 ]
 
@@ -121,7 +111,7 @@ ROOT_URLCONF = "RestaurCMS.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR, "RestaurCMS", "account", "templates")],
+        "DIRS": [os.path.join(BASE_DIR, "account", "restaurant", "templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -171,7 +161,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = "FR"
+# LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "fr"
 
 TIME_ZONE = "UTC"
 
@@ -195,16 +186,18 @@ FRONTEND_URL = "http://your-frontend-url.com"
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = "/static/"
-STATIC_ROOT = BASE_DIR / "static"
+
+# This is where Django will collect all static files for production.
+STATIC_ROOT = (
+    BASE_DIR / "staticfiles"
+)  # Ensure this is not the same as STATICFILES_DIRS
+
+# These are directories where Django will look for static files during development.
 STATICFILES_DIRS = [
-    "RestaurCMS/static",
+    BASE_DIR / "static",  # Update this to be a valid directory within your project
 ]
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
-
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
