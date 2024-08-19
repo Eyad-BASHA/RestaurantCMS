@@ -48,6 +48,10 @@ INSTALLED_APPS = [
     # "corsheaders",
     "drf_spectacular",
     "remise",
+    "common",
+    "stock",
+    "dashboard",
+    "blog",
 ]
 
 REST_FRAMEWORK = {
@@ -107,11 +111,18 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "RestaurCMS.urls"
-
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR, "account", "restaurant", "templates")],
+        # "DIRS": [os.path.join(BASE_DIR, "templates")],
+        "DIRS": [
+            os.path.join(BASE_DIR, "account", "templates"),
+            os.path.join(BASE_DIR, "restaurant", "templates"),
+            os.path.join(BASE_DIR, "remise", "templates"),
+            os.path.join(BASE_DIR, "stock", "templates"),
+            os.path.join(BASE_DIR, "dashboard", "templates"),
+            os.path.join(BASE_DIR, "blog", "templates"),
+        ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [

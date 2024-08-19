@@ -2,7 +2,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from restaurant.models.order import Order
 from restaurant.models.restaurant import MenuItem
-from ..common import TimeStampedModel
+from common.models.TimeStampedModel import TimeStampedModel
 
 
 class OrderItem(TimeStampedModel):

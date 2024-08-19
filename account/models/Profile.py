@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from PIL import Image
 from account.models.AddressClient import AddressClient
 from account.models.CustomUser import CustomUser
-from restaurant.models.common.TimeStampedModel import *
+from common.models.TimeStampedModel import *
 
 
 class Profile(TimeStampedModel):

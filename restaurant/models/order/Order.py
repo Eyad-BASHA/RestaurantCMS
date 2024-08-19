@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 from account.models.CustomUser import CustomUser
 from restaurant.models.restaurant import MenuItem, Restaurant
-from ..common import TimeStampedModel
+from common.models.TimeStampedModel import TimeStampedModel
 
 
 class Order(TimeStampedModel):
@@ -44,6 +44,11 @@ class Order(TimeStampedModel):
         help_text=_(
             "Le client qui a passé la commande. Peut être vide si la commande est sur place sans compte."
         ),
+    )
+    order_number = models.IntegerField(
+        unique=True,
+        verbose_name=_("Numéro de commande"),
+        help_text=_("Le numéro unique de la commande."),
     )
     client_name = models.CharField(
         max_length=255,
@@ -94,8 +99,19 @@ class Order(TimeStampedModel):
         help_text=_("Une note optionnelle concernant la commande."),
     )
 
+    def save(self, *args, **kwargs):
+        if not self.order_number:
+            last_order = Order.objects.all().order_by("order_number").last()
+            if last_order:
+                self.order_number = last_order.order_number + 1
+            else:
+                self.order_number = 1
+        super(Order, self).save(*args, **kwargs)
+
     def __str__(self):
-        return f"Order {self.id} - {self.staff.username}"
+        return (
+            f"Order {self.id} | Commande #{self.order_number} - {self.staff.username}"
+        )
 
     def clean(self):
         if self.order_type == "takeaway" and not self.client:

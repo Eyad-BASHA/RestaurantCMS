@@ -1,0 +1,21 @@
+{% extends "admin/base.html" %}
+{% load i18n %}
+
+{% block branding %}
+<h1 id="site-name">
+    <a href="{% url 'admin:index' %}">Administration du RestaurCMS</a>
+</h1>
+{% endblock %}
+
+{% block nav-global %}
+<div id="user-tools">
+    {% if user.is_authenticated %}
+        {% trans 'Bienvenue,' %} {{ user.username }}. {% trans 'Voir le site' %}
+        <a href="/" target="_blank">{% trans 'Voir le site' %}</a>
+        {% trans ' | ' %}
+        <a href="{% url 'admin:password_change' %}">{% trans 'Changer le mot de passe' %}</a>
+        {% trans ' | ' %}
+        <a href="{% url 'admin:logout' %}">{% trans 'Déconnexion' %}</a>
+    {% endif %}
+</div>
+{% endblock %}

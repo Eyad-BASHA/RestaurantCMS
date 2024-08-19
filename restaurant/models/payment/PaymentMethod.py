@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from ..common import TimeStampedModel
+from common.models.TimeStampedModel import TimeStampedModel
 
 
 class PaymentMethod(TimeStampedModel):

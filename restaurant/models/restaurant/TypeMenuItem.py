@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from ..common import TimeStampedModel
+from common.models.TimeStampedModel import TimeStampedModel
 
 
 class TypeMenuItem(TimeStampedModel):
@@ -15,6 +15,11 @@ class TypeMenuItem(TimeStampedModel):
         max_length=255,
         verbose_name=_("Nom"),
         help_text=_("Le nom du type d'élément de menu."),
+    )
+    slug = models.SlugField(
+        max_length=255,
+        verbose_name=_("Slug"),
+        help_text=_("L'identifiant unique du type d'élément de menu."),
     )
     description = models.TextField(
         blank=True,

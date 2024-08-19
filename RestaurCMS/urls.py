@@ -25,9 +25,11 @@ from drf_spectacular.views import (
     SpectacularRedocView,
     SpectacularSwaggerView,
 )
+from dashboard.admin import custom_admin_site
 
 urlpatterns = [
-    path("myDashboard/", admin.site.urls),
+    # path("myDashboard/", admin.site.urls),
+    path("myDashboard/", custom_admin_site.urls),
     path("", views.home, name="home"),
     path("api/schema/", SpectacularAPIView.as_view(), name="api-schema"),
     path(
@@ -39,6 +41,7 @@ urlpatterns = [
         "api/user/",
         include("account.urls"),
     ),
+    path("dashboard/", include("dashboard.urls")),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

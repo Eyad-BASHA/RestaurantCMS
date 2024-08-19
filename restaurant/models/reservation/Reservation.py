@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 
 from account.models import CustomUser
 from restaurant.models.restaurant import Restaurant
-from ..common import TimeStampedModel
+from common.models.TimeStampedModel import TimeStampedModel
 
 
 class Reservation(TimeStampedModel):

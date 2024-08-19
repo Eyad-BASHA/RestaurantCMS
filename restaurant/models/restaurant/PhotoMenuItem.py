@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from PIL import Image
 
 from restaurant.models.restaurant import MenuItem
-from ..common import TimeStampedModel
+from common.models.TimeStampedModel import TimeStampedModel
 
 
 class PhotoMenuItem(TimeStampedModel):

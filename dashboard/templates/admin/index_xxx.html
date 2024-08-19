@@ -1,0 +1,35 @@
+<!-- dashboard/templates/admin/index.html -->
+{% extends "admin/base_site.html" %} 
+{% load i18n %}
+
+
+{% block title %}
+Gestion du RestaurCMS
+{% endblock %} 
+
+{% block content_title %}  <!-- Ceci est pour le titre principal de la page -->
+    <h1>{% blocktrans %}Bienvenue dans le tableau de bord du RestaurCMS{% endblocktrans %}</h1>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-sections">
+  <!-- Inclure ici les tableaux de bord des différentes applications -->
+  <!-- <div class="dashboard-section">
+    <h2>Gestion des utilisateurs</h2>
+    <a href="{% url 'admin:account_customuser_changelist' %}"
+      >Gérer les utilisateurs</a
+    >
+  </div> -->
+  <!-- <div class="dashboard-section">
+    <h2>Gestion des restaurants</h2>
+    <a href="{% url 'admin:restaurant_restaurant_changelist' %}"
+      >Gérer les restaurants</a
+    >
+  </div> -->
+  <!-- Ajoutez d'autres sections selon vos besoins -->
+</div>
+{% endblock %}
+
+{% block sidebar %}  <!-- Ceci est pour la barre latérale gauche -->
+    {{ block.super }}  <!-- Conservez la sidebar d'origine -->
+{% endblock %}

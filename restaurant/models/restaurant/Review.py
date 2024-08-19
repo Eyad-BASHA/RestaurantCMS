@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 
 from account.models import CustomUser
 from restaurant.models.restaurant import MenuItem
-from ..common import TimeStampedModel
+from common.models.TimeStampedModel import TimeStampedModel
 
 
 class Review(TimeStampedModel):

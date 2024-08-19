@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from restaurant.models.restaurant.Menu import Menu
 from restaurant.models.restaurant.TypeMenuItem import TypeMenuItem
 from restaurant.models.restaurant.CategoryMenuItem import CategoryMenuItem
-from ..common import TimeStampedModel
+from common.models.TimeStampedModel import TimeStampedModel
 
 
 class MenuItem(TimeStampedModel):

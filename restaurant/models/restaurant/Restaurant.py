@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from ..common import TimeStampedModel
+from common.models.TimeStampedModel import TimeStampedModel
 
 
 class Restaurant(TimeStampedModel):
@@ -43,6 +43,13 @@ class Restaurant(TimeStampedModel):
         null=True,
         verbose_name=_("Logo"),
         help_text=_("Le logo du restaurant."),
+    )
+
+    staff = models.ManyToManyField(
+        "account.CustomUser",
+        related_name="restaurants",
+        limit_choices_to={"roles__name__in": ["admin", "moderateur"]},
+        verbose_name="Personnel",
     )
 
     def __str__(self):

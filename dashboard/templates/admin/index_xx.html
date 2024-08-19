@@ -1,0 +1,114 @@
+{% extends "admin/index.html" %} 
+
+{% block content %}
+<div id="content-main">
+  <div class="app-list">
+    <h2>{{ site_header|default:_('Site administration') }}</h2>
+
+    <div class="module" id="app-account">
+      <table>
+        <caption>
+          <a href="{% url 'admin:account_customuser_changelist' %}">ACCOUNT</a>
+        </caption>
+        <tbody>
+          <tr>
+            <th scope="row">
+              <a href="{% url 'admin:account_customuser_changelist' %}"
+                >Utilisateurs</a
+              >
+            </th>
+          </tr>
+          <tr>
+            <th scope="row">
+              <a href="{% url 'admin:account_role_changelist' %}">Rôles</a>
+            </th>
+          </tr>
+          <tr>
+            <th scope="row">
+              <a href="{% url 'admin:account_profile_changelist' %}">Profils</a>
+            </th>
+          </tr>
+          <tr>
+            <th scope="row">
+              <a href="{% url 'admin:account_addressclient_changelist' %}"
+                >Adresses clients</a
+              >
+            </th>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="module" id="app-restaurant">
+      <table>
+        <caption>
+          <a href="{% url 'admin:restaurant_restaurant_changelist' %}"
+            >RESTAURANT</a
+          >
+        </caption>
+        <tbody>
+          <tr>
+            <th scope="row">
+              <a
+                href="{% url 'admin:restaurant_categoryrestaurant_changelist' %}"
+                >Catégories de restaurants</a
+              >
+            </th>
+          </tr>
+          <tr>
+            <th scope="row">
+              <a href="{% url 'admin:restaurant_restaurant_changelist' %}"
+                >Restaurants</a
+              >
+            </th>
+          </tr>
+          <tr>
+            <th scope="row">
+              <a
+                href="{% url 'admin:restaurant_addressrestaurant_changelist' %}"
+                >Adresses de restaurants</a
+              >
+            </th>
+          </tr>
+          <tr>
+            <th scope="row">
+              <a href="{% url 'admin:restaurant_typemenuitem_changelist' %}"
+                >Types d'éléments de menu</a
+              >
+            </th>
+          </tr>
+          <tr>
+            <th scope="row">
+              <a href="{% url 'admin:restaurant_categorymenuitem_changelist' %}"
+                >Catégories d'articles de menu</a
+              >
+            </th>
+          </tr>
+          <tr>
+            <th scope="row">
+              <a href="{% url 'admin:restaurant_menu_changelist' %}">Menus</a>
+            </th>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="module" id="app-auth">
+      <table>
+        <caption>
+          <a href="{% url 'admin:auth_group_changelist' %}"
+            >AUTHENTIFICATION ET AUTORISATION</a
+          >
+        </caption>
+        <tbody>
+          <tr>
+            <th scope="row">
+              <a href="{% url 'admin:auth_group_changelist' %}">Groupes</a>
+            </th>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

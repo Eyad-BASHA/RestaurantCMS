@@ -1,4 +1,4 @@
-from .common.TimeStampedModel import TimeStampedModel
+from common.models.TimeStampedModel import TimeStampedModel
 from .order.Cart import Cart
 from .order.CartItem import CartItem
 from .order.Order import Order

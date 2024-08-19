@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 
 from restaurant.models.order import Order
 from restaurant.models.payment.PaymentMethod import PaymentMethod
-from ..common import TimeStampedModel
+from common.models.TimeStampedModel import TimeStampedModel
 
 
 class Payment(TimeStampedModel):

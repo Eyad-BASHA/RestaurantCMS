@@ -1,0 +1,7 @@
+{# admin/multi_image_input.html #}
+<!-- admin/multi_image_input.html -->
+{% include "admin/widgets/clearable_file_input.html" %}
+
+{% for input in widget.subwidgets %}
+    {{ input.tag }}
+{% endfor %}
