@@ -35,7 +35,7 @@ class PhotoMenuItem(TimeStampedModel):
     )
 
     def __str__(self):
-        return f"Photo for {self.menu_item.name}"
+        return f"Image pour {self.menu_item.name}"
 
     # REDIMENSIONNER LA PHOTO
     def save(

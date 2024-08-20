@@ -11,7 +11,7 @@ class ArticlePhotoForm(forms.ModelForm):
         model = ArticlePhoto
         fields = ["image"]
         widgets = {
-            "image": MultiImageInputForm(),  # Correct usage of the widget
+            "image": MultiImageInputForm(), 
         }
 
 
@@ -22,8 +22,8 @@ class ArticlePhotoInline(admin.TabularInline):
 
 
 class ArticleAdmin(admin.ModelAdmin):
-    list_display = ("title", "category", "author", "status", "published_at")
-    search_fields = ("title", "content", "author__username", "category__name")
+    list_display = ("title", "category", "slug", "author", "status", "published_at")
+    search_fields = ("title", "content", "slug", "author__username", "category__name")
     list_filter = ("category", "author", "status", "published_at")
     prepopulated_fields = {"slug": ("title",)}
     inlines = [ArticlePhotoInline]

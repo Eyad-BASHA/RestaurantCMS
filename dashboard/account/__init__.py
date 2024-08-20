@@ -1,1 +1,2 @@
-from .gest_utilisateur import *
+from .CustomUserAdmin import *
+from .ProfileAdmin import *

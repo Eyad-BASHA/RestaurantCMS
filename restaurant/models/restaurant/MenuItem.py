@@ -15,6 +15,12 @@ class MenuItem(TimeStampedModel):
     d'un restaurant, avec des détails tels que le prix, la catégorie, et le type.
     """
 
+    STATUS_CHOICES = [
+        ("available", _("Disponible")),
+        ("unavailable", _("Indisponible")),
+        ("out_of_stock", _("En rupture de stock")),
+    ]
+
     menu = models.ForeignKey(
         Menu,
         on_delete=models.CASCADE,
@@ -64,6 +70,13 @@ class MenuItem(TimeStampedModel):
         default=True,
         verbose_name=_("Provenant de la cuisine"),
         help_text=_("Indique si cet élément est préparé en cuisine ou au bar."),
+    )
+    status = models.CharField(
+        max_length=15,
+        choices=STATUS_CHOICES,
+        default="available",
+        verbose_name=_("Statut"),
+        help_text=_("Indique la disponibilité de l'élément de menu."),
     )
 
     def __str__(self):

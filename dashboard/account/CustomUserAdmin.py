@@ -3,24 +3,28 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.db import IntegrityError, transaction
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.utils.translation import gettext_lazy as _
 
 from account.models.CustomUser import CustomUser
 from account.models.Role import Role
 from account.models.AddressClient import AddressClient
 from account.models.Profile import Profile
+from restaurant.models.restaurant import Restaurant
 
 
-class ProfileAdmin(admin.ModelAdmin):
-    fieldsets = (
-        (None, {"fields": ("user", "gender")}),
-        (
-            "Personal info",
-            {"fields": ("phone_number", "bio", "profile_image", "date_of_birth")},
-        ),
-        ("Addresses", {"fields": ("addresses",)}),
-    )
-    filter_horizontal = ["addresses"]
-    list_display = ["user", "phone_number", "gender"]
+
+class RestaurantFilter(admin.SimpleListFilter):
+    title = _('Restaurant')
+    parameter_name = 'restaurant'
+
+    def lookups(self, request, model_admin):
+        restaurants = Restaurant.objects.all()
+        return [(restaurant.id, restaurant.name) for restaurant in restaurants]
+
+    def queryset(self, request, queryset):
+        if self.value():
+            return queryset.filter(restaurants__id=self.value())
+        return queryset
 
 
 class ProfileInline(admin.StackedInline):
@@ -79,7 +83,7 @@ class CustomUserAdmin(BaseUserAdmin):
     readonly_fields = ("last_login", "date_joined")
     ordering = ["-date_joined"]
     filter_horizontal = ["roles"]
-    list_filter = ["is_staff", "is_active", "is_superuser"]
+    list_filter = ["is_staff", "is_active", "is_superuser", RestaurantFilter]
 
     inlines = [ProfileInline]
 

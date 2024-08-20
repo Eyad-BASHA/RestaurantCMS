@@ -3,15 +3,15 @@
 {% load i18n %}
 
 
-{% block title %}
+{# block title #}
 Gestion du RestaurCMS
-{% endblock %} 
+{# endblock #} 
 
-{% block content_title %}  <!-- Ceci est pour le titre principal de la page -->
+{# block content_title #}  <!-- Ceci est pour le titre principal de la page -->
     <h1>{% blocktrans %}Bienvenue dans le tableau de bord du RestaurCMS{% endblocktrans %}</h1>
-{% endblock %}
+{# endblock #}
 
-{% block content %}
+{# block content #}
 <div class="dashboard-sections">
   <!-- Inclure ici les tableaux de bord des différentes applications -->
   <!-- <div class="dashboard-section">
@@ -28,8 +28,8 @@ Gestion du RestaurCMS
   </div> -->
   <!-- Ajoutez d'autres sections selon vos besoins -->
 </div>
-{% endblock %}
+{# endblock #}
 
-{% block sidebar %}  <!-- Ceci est pour la barre latérale gauche -->
+{# block sidebar #}  <!-- Ceci est pour la barre latérale gauche -->
     {{ block.super }}  <!-- Conservez la sidebar d'origine -->
-{% endblock %}
+{# endblock #}
