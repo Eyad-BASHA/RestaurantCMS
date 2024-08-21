@@ -58,6 +58,7 @@ class CustomAdminSite(admin.AdminSite):
                 "PhotoMenuItem",  # Photos des articles du menu
                 "Review",  # Avis des clients sur le restaurant
                 "Reservation",  # Réservations effectuées au restaurant
+                "Availability",
                 "Order",  # Commandes passées dans le restaurant
                 "OrderItem",  # Articles commandés dans une commande spécifique
                 "PaymentMethod",  # Méthodes de paiement disponibles
@@ -124,6 +125,7 @@ custom_admin_site.register(Review, ReviewAdmin)
 custom_admin_site.register(TypeMenuItem, TypeMenuItemAdmin)
 
 custom_admin_site.register(Reservation, ReservationAdmin)
+custom_admin_site.register(Availability, AvailabilityAdmin)
 
 custom_admin_site.register(PaymentMethod, PaymentMethodAdmin)
 custom_admin_site.register(Payment, PaymentAdmin)
@@ -147,4 +149,3 @@ custom_admin_site.register(LikeArticle, LikeArticleAdmin)
 custom_admin_site.register(LikeComment, LikeCommentAdmin)
 custom_admin_site.register(Reply, ReplyAdmin)
 custom_admin_site.register(Tag, TagAdmin)
-

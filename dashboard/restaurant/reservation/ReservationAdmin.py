@@ -9,21 +9,18 @@ class ReservationAdmin(admin.ModelAdmin):
     list_display = [
         "user",
         "restaurant",
-        "number_of_people",
         "reservation_date",
-        "special_request_preview",
+        "start_time",
+        "end_time",
+        "number_of_people",
     ]
-    search_fields = [
-        "user__email",
-        "user__username",
-        "restaurant__name",
-        "special_request",
-    ]
+    search_fields = ["user__username", "restaurant__name", "reservation_date"]
     list_filter = ["restaurant", "reservation_date"]
     date_hierarchy = "reservation_date"
     ordering = ["-reservation_date"]
     list_per_page = 20
     list_select_related = ["user", "restaurant"]
+    filter_horizontal = ("tables",)
 
     fieldsets = (
         (
@@ -32,8 +29,12 @@ class ReservationAdmin(admin.ModelAdmin):
                 "fields": [
                     "user",
                     "restaurant",
-                    "number_of_people",
                     "reservation_date",
+                    "start_time",
+                    "end_time",
+                    "number_of_people",
+                    "is_confirmed",
+                    "tables",
                 ],
             },
         ),

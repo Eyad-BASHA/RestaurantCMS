@@ -6,6 +6,7 @@ from .order.OrderItem import OrderItem
 from .payment.Payment import Payment
 from .payment.PaymentMethod import PaymentMethod
 from .reservation.Reservation import Reservation
+from .reservation.Availability import Availability
 from .restaurant.AddressRestaurant import AddressRestaurant
 from .restaurant.CategoryRestaurant import CategoryRestaurant
 from .restaurant.CategoryMenuItem import CategoryMenuItem

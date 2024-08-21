@@ -1,4 +1,7 @@
+import stripe
+from django.conf import settings
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 from remise.models import Discount
 from restaurant.models.order import Order
 
@@ -29,3 +32,30 @@ def calculate_payment_amount(request):
     amount = round(max(amount, 0), 2)
 
     return JsonResponse({"amount": amount})
+
+
+
+
+@csrf_exempt
+def create_checkout_session(request):
+    stripe.api_key = settings.STRIPE_SECRET_KEY
+
+    session = stripe.checkout.Session.create(
+        payment_method_types=["card"],
+        line_items=[
+            {
+                "price_data": {
+                    "currency": "usd",
+                    "product_data": {
+                        "name": "Order Name",
+                    },
+                    "unit_amount": 2000,  # Amount in cents
+                },
+                "quantity": 1,
+            }
+        ],
+        mode="payment",
+        success_url="https://yourdomain.com/success/",
+        cancel_url="https://yourdomain.com/cancel/",
+    )
+    return JsonResponse({"id": session.id})
