@@ -7,12 +7,13 @@ class RestaurantAdmin(admin.ModelAdmin):
     list_display = [
         "name",
         "slug",
+        "category",
         "description",
         "addresses",
         "logo",
     ]
-    list_filter = ["name", "slug", "description", "logo"]
-    search_fields = ["name", "slug", "description", "logo"]
+    list_filter = ["name", "slug", "category", "description", "logo"]
+    search_fields = ["name", "slug", "category", "description"]
     fieldsets = (
         (
             _("Informations générales"),
@@ -20,9 +21,11 @@ class RestaurantAdmin(admin.ModelAdmin):
                 "fields": (
                     "name",
                     "slug",
+                    "category",
                     "description",
                     "logo",
-                    "staff", 
+                    "addresses",
+                    "staff",
                 )
             },
         ),

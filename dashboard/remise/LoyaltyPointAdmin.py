@@ -7,7 +7,7 @@ class LoyaltyPointAdmin(admin.ModelAdmin):
     list_filter = ("program", "earned_date", "expiry_date")
     ordering = ("-earned_date",)
     list_per_page = 20
-    # readonly_fields = ("created_at", "updated_at")
+    readonly_fields = ("points", "earned_date")
 
     fieldsets = (
         (
@@ -17,12 +17,9 @@ class LoyaltyPointAdmin(admin.ModelAdmin):
                     "client",
                     "program",
                     "points",
-                    "earned_date",
                     "expiry_date",
                 ),
             },
         ),
-        ("Dates", {"fields": ("created_at", "updated_at"), "classes": ("collapse",)}),
+        # ("Dates", {"fields": ("created_at", "updated_at"), "classes": ("collapse",)}),
     )
-
-

@@ -22,4 +22,3 @@ class CartItemAdmin(admin.ModelAdmin):
         ),
         ("Dates", {"fields": ("created_at", "updated_at"), "classes": ("collapse",)}),
     )
-

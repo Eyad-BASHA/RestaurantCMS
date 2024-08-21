@@ -1,8 +1,9 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from common.models import TimeStampedModel
 
 
-class Discount(models.Model):
+class Discount(TimeStampedModel):
     """
     Entité représentant une remise.
 

@@ -1,11 +1,12 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from account.models import Profile
+from common.models import TimeStampedModel
 from remise.models import Discount
 from restaurant.models.order import Order
 
 
-class UsedDiscount(models.Model):
+class UsedDiscount(TimeStampedModel):
     """
     Entité représentant l'utilisation d'une remise par un utilisateur.
 

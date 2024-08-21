@@ -2,10 +2,11 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from account.models import CustomUser, Profile
+from common.models import TimeStampedModel
 from remise.models import LoyaltyProgram
 
 
-class LoyaltyPoint(models.Model):
+class LoyaltyPoint(TimeStampedModel):
     """
     Entité représentant les points de fidélité d'un utilisateur.
 

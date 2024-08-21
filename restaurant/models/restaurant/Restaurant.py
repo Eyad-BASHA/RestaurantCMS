@@ -22,6 +22,15 @@ class Restaurant(TimeStampedModel):
         verbose_name=_("Slug"),
         help_text=_("Un identifiant unique dérivé du nom, utilisé dans les URLs."),
     )
+    # categorie_restaurant
+    category = models.ForeignKey(
+        "restaurant.CategoryRestaurant",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="restaurants",
+        verbose_name=_("Catégorie"),
+    )
     description = models.TextField(
         blank=True,
         null=True,

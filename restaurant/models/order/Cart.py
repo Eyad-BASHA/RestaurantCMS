@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-
+from django.core.exceptions import ValidationError
 from account.models.CustomUser import CustomUser
 from restaurant.models.restaurant import MenuItem
 from common.models.TimeStampedModel import TimeStampedModel
@@ -33,8 +33,26 @@ class Cart(TimeStampedModel):
             item.menu_item.price * item.quantity for item in self.cart_items.all()
         )
 
+    # def update_total_price(self):
+    #     """Met à jour le prix total du panier."""
+    #     self.total_price = self.calculate_total_price()
+    #     self.save(update_fields=["total_price"])
+
+    # def calculate_total_price(self):
+    #     return sum(
+    #         item.menu_item.price * item.quantity for item in self.cart_items.all()
+    #     )
+
+    def clear_cart(self):
+        """Vide le panier."""
+        self.cart_items.all().delete()
+
     def __str__(self):
         return f"Panier pour {self.user.username}"
+
+    def clean(self):
+        if not self.user:
+            raise ValidationError(_("Un panier doit être associé à un utilisateur."))
 
     class Meta:
         verbose_name = _("Panier")

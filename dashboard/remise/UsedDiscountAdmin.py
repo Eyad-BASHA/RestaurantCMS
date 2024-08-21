@@ -16,11 +16,11 @@ class UsedDiscountAdmin(admin.ModelAdmin):
                     "client",
                     "discount",
                     "order",
-                    "used_at",
+                    # "used_at",
                 ),
             },
         ),
-        ("Dates", {"fields": ("created_at", "updated_at"), "classes": ("collapse",)}),
+        # ("Dates", {"fields": ("created_at", "updated_at"), "classes": ("collapse",)}),
     )
 
 

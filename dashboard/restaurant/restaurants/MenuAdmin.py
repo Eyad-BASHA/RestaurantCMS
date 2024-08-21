@@ -21,12 +21,6 @@ class MenuAdmin(admin.ModelAdmin):
                 )
             },
         ),
-        (
-            _("Timestamps"),
-            {
-                "fields": ("created_at", "updated_at"),
-            },
-        ),
     )
     readonly_fields = ["created_at", "updated_at"]
     ordering = ["-created_at"]

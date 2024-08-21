@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-
+from django.core.exceptions import ValidationError
 from restaurant.models.order import Cart
 from restaurant.models.restaurant import MenuItem
 from common.models.TimeStampedModel import TimeStampedModel
@@ -15,8 +15,9 @@ class CartItem(TimeStampedModel):
     """
 
     cart = models.ForeignKey(
-        Cart,
+        "Cart",
         on_delete=models.CASCADE,
+        related_name="cart_items",
         verbose_name=_("Panier"),
         help_text=_("Le panier auquel cet article est associé."),
     )
@@ -30,6 +31,10 @@ class CartItem(TimeStampedModel):
         verbose_name=_("Quantité"),
         help_text=_("La quantité de l'élément de menu ajoutée au panier."),
     )
+
+    @property
+    def item_total(self):
+        return self.menu_item.price * self.quantity
 
     def __str__(self):
         return f"{self.menu_item.name} x {self.quantity}"

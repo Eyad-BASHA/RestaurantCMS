@@ -4,30 +4,59 @@ from restaurant.models.reservation import Reservation
 
 
 class ReservationAdmin(admin.ModelAdmin):
-    list_display = ["user", "restaurant", "number_of_people", "reservation_date"]
-    search_fields = ["user__email", "restaurant__name"]
+    """Admin interface for managing Reservations"""
+
+    list_display = [
+        "user",
+        "restaurant",
+        "number_of_people",
+        "reservation_date",
+        "special_request_preview",
+    ]
+    search_fields = [
+        "user__email",
+        "user__username",
+        "restaurant__name",
+        "special_request",
+    ]
     list_filter = ["restaurant", "reservation_date"]
     date_hierarchy = "reservation_date"
     ordering = ["-reservation_date"]
-    list_per_page = 10
+    list_per_page = 20
     list_select_related = ["user", "restaurant"]
-    raw_id_fields = ["user", "restaurant"]
-    # readonly_fields = ["created", "modified"]
+
     fieldsets = (
         (
-            None,
-            {"fields": ["user", "restaurant", "number_of_people", "reservation_date"]},
+            "Reservation Details",
+            {
+                "fields": [
+                    "user",
+                    "restaurant",
+                    "number_of_people",
+                    "reservation_date",
+                ],
+            },
         ),
-        ("Informations supplémentaires", {"fields": ["special_request"]}),
-        ("Métadonnées", {"fields": ["created", "modified"]}),
-    )
-    add_fieldsets = (
         (
-            None,
-            {"fields": ["user", "restaurant", "number_of_people", "reservation_date"]},
+            "Additional Information",
+            {
+                "fields": ["special_request"],
+            },
         ),
-        ("Informations supplémentaires", {"fields": ["special_request"]}),
     )
 
+    readonly_fields = ["created_at", "updated_at"]
 
-# admin.site.register(Reservation, ReservationAdmin)
+    def special_request_preview(self, obj):
+        """Displays a truncated version of special requests in the list view"""
+        return (
+            (obj.special_request[:50] + "...")
+            if obj.special_request and len(obj.special_request) > 50
+            else obj.special_request
+        )
+
+    special_request_preview.short_description = "Special Request"
+
+    def get_queryset(self, request):
+        """Optimizes queryset by selecting related user and restaurant"""
+        return super().get_queryset(request).select_related("user", "restaurant")

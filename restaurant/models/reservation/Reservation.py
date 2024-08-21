@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-
+from django.core.exceptions import ValidationError
+from django.utils import timezone
 from account.models import CustomUser
 from restaurant.models.restaurant import Restaurant
 from common.models.TimeStampedModel import TimeStampedModel
@@ -40,6 +41,13 @@ class Reservation(TimeStampedModel):
         verbose_name=_("Demande spéciale"),
         help_text=_("Toute demande spéciale pour cette réservation."),
     )
+
+    def clean(self):
+        """Ensure that the reservation date is not in the past."""
+        if self.reservation_date < timezone.now():
+            raise ValidationError(
+                _("La date de la réservation ne peut pas être dans le passé.")
+            )
 
     def __str__(self):
         return f"Réservation pour {self.number_of_people} personnes au {self.restaurant.name}"

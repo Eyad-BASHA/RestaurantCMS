@@ -2,8 +2,12 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 from account.models.CustomUser import CustomUser
+from restaurant.models.order import OrderItem
 from restaurant.models.restaurant import MenuItem, Restaurant
 from common.models.TimeStampedModel import TimeStampedModel
+from django.db.models.signals import post_save, m2m_changed
+from django.dispatch import receiver
+from django.core.exceptions import ValidationError
 
 
 class Order(TimeStampedModel):
@@ -41,12 +45,11 @@ class Order(TimeStampedModel):
         blank=True,
         related_name="orders",
         verbose_name=_("Client"),
-        help_text=_(
-            "Le client qui a passé la commande. Peut être vide si la commande est sur place sans compte."
-        ),
+        help_text=_("Le client qui a passé la commande."),
     )
     order_number = models.IntegerField(
         unique=True,
+        editable=False,
         verbose_name=_("Numéro de commande"),
         help_text=_("Le numéro unique de la commande."),
     )
@@ -85,12 +88,15 @@ class Order(TimeStampedModel):
         choices=ORDER_STATUS_CHOICES,
         verbose_name=_("Statut de la commande"),
         help_text=_("Le statut actuel de la commande."),
+        default="pending",
     )
     total_amount = models.DecimalField(
         max_digits=10,
         decimal_places=2,
         verbose_name=_("Montant total"),
         help_text=_("Le montant total de la commande."),
+        default=0.00,
+        editable=False,
     )
     note = models.TextField(
         blank=True,
@@ -108,16 +114,18 @@ class Order(TimeStampedModel):
                 self.order_number = 1
         super(Order, self).save(*args, **kwargs)
 
+    def update_total_amount(self):
+        self.total_amount = sum(item.item_total for item in self.order_items.all())
+        self.save(update_fields=["total_amount"])
+
     def __str__(self):
         return (
             f"Order {self.id} | Commande #{self.order_number} - {self.staff.username}"
         )
 
     def clean(self):
-        if self.order_type == "takeaway" and not self.client:
-            raise ValidationError(
-                _("Une commande à emporter doit avoir un client enregistré.")
-            )
+        if self.order_type == "takeaway" and not (self.client or self.client_name):
+            raise ValidationError(_("Une commande à emporter doit avoir un client."))
         if self.order_type == "dine_in" and not (self.client_name or self.table_number):
             raise ValidationError(
                 _(

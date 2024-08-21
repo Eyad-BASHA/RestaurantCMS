@@ -32,7 +32,7 @@ class DiscountAdmin(admin.ModelAdmin):
                 ),
             },
         ),
-        ("Dates", {"fields": ("created_at", "updated_at"), "classes": ("collapse",)}),
+        # ("Dates", {"fields": ("created_at", "updated_at"), "classes": ("collapse",)}),
     )
 
 

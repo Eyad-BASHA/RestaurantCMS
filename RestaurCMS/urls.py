@@ -41,6 +41,10 @@ urlpatterns = [
         "api/user/",
         include("account.urls"),
     ),
+    path(
+        "api/restaurant/",
+        include("restaurant.urls"),
+    ),
     path("dashboard/", include("dashboard.urls")),
 ]
 if settings.DEBUG:

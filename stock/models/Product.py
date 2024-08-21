@@ -9,8 +9,26 @@ class Product(TimeStampedModel):
 
     Ce modèle contient les informations essentielles sur un produit,
     y compris son nom, sa description, la quantité disponible en stock,
-    et l'unité de mesure utilisée.
+    l'unité de mesure utilisée, et l'emplacement de stockage initial.
     """
+
+    UNIT_CHOICES = (
+        ("kg", _("Kilogramme")),
+        ("g", _("Gramme")),
+        ("mg", _("Milligramme")),
+        ("l", _("Litre")),
+        ("ml", _("Millilitre")),
+        ("cm", _("Centimètre")),
+        ("m", _("Mètre")),
+        ("piece", _("Pièce")),
+        ("box", _("Boîte")),
+        ("pack", _("Pack")),
+        ("bottle", _("Bouteille")),
+        ("dozen", _("Douzaine")),
+        ("can", _("Canette")),
+        ("jar", _("Pot")),
+        ("bag", _("Sac")),
+    )
 
     name = models.CharField(
         max_length=255,
@@ -30,12 +48,19 @@ class Product(TimeStampedModel):
     )
     unit = models.CharField(
         max_length=50,
+        choices=UNIT_CHOICES,
         verbose_name=_("Unité de mesure"),
-        help_text=_("L'unité de mesure pour ce produit (par ex: kg, litre, etc.)."),
+        help_text=_("L'unité de mesure pour ce produit."),
+    )
+    location = models.ForeignKey(
+        "StockLocation",
+        on_delete=models.CASCADE,
+        verbose_name=_("Emplacement de stockage"),
+        help_text=_("L'emplacement de stockage initial pour ce produit."),
     )
 
     def __str__(self):
-        return self.name
+        return f"{self.name} ({self.quantity} {self.unit}) - {self.location.name}"
 
     class Meta:
         verbose_name = _("Produit")

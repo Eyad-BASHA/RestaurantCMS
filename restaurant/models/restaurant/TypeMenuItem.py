@@ -14,7 +14,9 @@ class TypeMenuItem(TimeStampedModel):
     name = models.CharField(
         max_length=255,
         verbose_name=_("Nom"),
-        help_text=_("Le nom du type d'élément de menu."),
+        help_text=_(
+            "Le nom du type d'élément de menu. Possibilités : Plat, Boisson, Dessert, Entrée, Accompagnement, etc."
+        ),
     )
     slug = models.SlugField(
         max_length=255,

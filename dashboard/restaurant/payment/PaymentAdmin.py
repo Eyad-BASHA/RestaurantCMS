@@ -1,5 +1,6 @@
 from django.contrib import admin
 
+from remise.models import Discount
 from restaurant.models.payment import Payment
 
 
@@ -17,14 +18,20 @@ class PaymentAdmin(admin.ModelAdmin):
             {
                 "fields": (
                     "order",
+                    "discount",
                     "amount",
                     "payment_method",
                     "status",
                 ),
             },
         ),
-        ("Dates", {"fields": ("created_at", "updated_at"), "classes": ("collapse",)}),
+        # ("Dates", {"fields": ("created_at", "updated_at"), "classes": ("collapse",)}),
     )
 
+    class Media:
+        js = ("js/admin_payment.js",)
 
-
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        form.base_fields["discount"].queryset = Discount.objects.filter(is_active=True)
+        return form
