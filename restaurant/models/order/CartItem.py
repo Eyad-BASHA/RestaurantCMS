@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from restaurant.models.order import Cart
 from restaurant.models.restaurant import MenuItem
 from common.models.TimeStampedModel import TimeStampedModel
-
+from decimal import Decimal
 
 class CartItem(TimeStampedModel):
     """
@@ -34,7 +34,13 @@ class CartItem(TimeStampedModel):
 
     @property
     def item_total(self):
-        return self.menu_item.price * self.quantity
+        if (
+            self.quantity is None
+            or self.menu_item is None
+            or self.menu_item.price is None
+        ):
+            return Decimal("0.00")
+        return self.quantity * self.menu_item.price
 
     def __str__(self):
         return f"{self.menu_item.name} x {self.quantity}"

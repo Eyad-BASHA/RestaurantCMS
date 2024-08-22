@@ -2,7 +2,7 @@ from rest_framework import serializers
 from restaurant.models.order import Cart, CartItem
 from account.serializers import (
     UserSerializer,
-)  
+)
 
 
 class CartItemSerializer(serializers.ModelSerializer):

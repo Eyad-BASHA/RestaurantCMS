@@ -1,10 +1,8 @@
-from rest_framework import serializers
+from rest_framework import serializers, permissions
 from restaurant.models.restaurant import CategoryMenuItem
 from django.utils.text import slugify
 
 from restaurant.custom_permissions import IsAdminOrReadOnly
-
-
 
 
 class CategoryMenuItemSerializer(serializers.ModelSerializer):

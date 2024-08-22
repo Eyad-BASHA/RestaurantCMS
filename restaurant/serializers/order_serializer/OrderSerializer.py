@@ -2,8 +2,13 @@ from rest_framework import serializers
 from restaurant.models.order import Order, OrderItem
 from account.serializers import (
     UserSerializer,
-)
-from restaurant.serializers.order_serializer import OrderItemSerializer  
+)  
+
+
+class OrderItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderItem
+        fields = ["id", "menu_item", "quantity", "item_total", "note"]
 
 
 class OrderSerializer(serializers.ModelSerializer):

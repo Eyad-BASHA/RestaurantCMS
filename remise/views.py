@@ -1,4 +1,5 @@
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated, BasePermission
 from rest_framework.exceptions import ValidationError
 from remise.models import Discount, LoyaltyPoint, LoyaltyProgram, UsedDiscount
 from remise.serializers import (
@@ -10,12 +11,12 @@ from remise.serializers import (
 
 
 # Custom Permissions
-class IsAdminOrModerator(permissions.BasePermission):
+class IsAdminOrModerator(BasePermission):
     def has_permission(self, request, view):
         return request.user.is_staff or request.user.has_perm("remise.manage_discount")
 
 
-class IsClient(permissions.BasePermission):
+class IsClient(BasePermission):
     def has_permission(self, request, view):
         return (
             request.user.is_authenticated
@@ -30,7 +31,7 @@ class DiscountViewSet(viewsets.ModelViewSet):
 
     queryset = Discount.objects.all()
     serializer_class = DiscountSerializer
-    permission_classes = [permissions.IsAuthenticated, IsAdminOrModerator]
+    permission_classes = [IsAuthenticated, IsAdminOrModerator]
 
     def get_queryset(self):
         # Filtrer les remises actives
@@ -50,7 +51,7 @@ class LoyaltyPointViewSet(viewsets.ModelViewSet):
 
     queryset = LoyaltyPoint.objects.all()
     serializer_class = LoyaltyPointSerializer
-    permission_classes = [permissions.IsAuthenticated, IsClient]
+    permission_classes = [IsAuthenticated, IsClient]
 
     def get_queryset(self):
         # Filtrer pour retourner seulement les points de fidélité de l'utilisateur connecté
@@ -72,7 +73,7 @@ class LoyaltyProgramViewSet(viewsets.ModelViewSet):
 
     queryset = LoyaltyProgram.objects.all()
     serializer_class = LoyaltyProgramSerializer
-    permission_classes = [permissions.IsAuthenticated, IsAdminOrModerator]
+    permission_classes = [IsAuthenticated, IsAdminOrModerator]
 
     def get_queryset(self):
         # Filtrer les programmes actifs
@@ -86,7 +87,7 @@ class UsedDiscountViewSet(viewsets.ModelViewSet):
 
     queryset = UsedDiscount.objects.all()
     serializer_class = UsedDiscountSerializer
-    permission_classes = [permissions.IsAuthenticated, IsClient]
+    permission_classes = [IsAuthenticated, IsClient]
 
     def get_queryset(self):
         # Filtrer pour retourner seulement les remises utilisées par l'utilisateur connecté

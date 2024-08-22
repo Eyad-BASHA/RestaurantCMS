@@ -16,7 +16,6 @@ class ReviewSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ["created_at", "updated_at"]
 
-
     def validate_rating(self, value):
         if value < 1 or value > 5:
             raise serializers.ValidationError(

@@ -164,7 +164,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """Create a new user with encrypted password and return it"""
-        profile_data = validated_data.pop('profile', None)
+        profile_data = validated_data.pop("profile", None)
         user = get_user_model().objects.create_user(**validated_data)
 
         if profile_data:
@@ -176,7 +176,7 @@ class UserSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         """Update a user, setting the password correctly and return it"""
 
-        profile_data = validated_data.pop('profile', None)
+        profile_data = validated_data.pop("profile", None)
         user = super().update(instance, validated_data)
 
         if profile_data:

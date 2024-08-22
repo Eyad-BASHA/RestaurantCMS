@@ -2,10 +2,11 @@ from rest_framework import serializers
 from datetime import timezone
 from account.serializers import UserSerializer
 from blog.models import Article, Category, Tag
+from blog.serializers.ArticlePhotoSerializer import ArticlePhotoSerializer
 
 
 class ArticleSerializer(serializers.ModelSerializer):
-    photos = serializers.StringRelatedField(many=True)
+    photos = ArticlePhotoSerializer(many=True, read_only=True)
     author = UserSerializer(read_only=True)
     tags = serializers.SlugRelatedField(
         many=True, slug_field="name", queryset=Tag.objects.all()
@@ -28,6 +29,7 @@ class ArticleSerializer(serializers.ModelSerializer):
             "published_at",
             "created_at",
             "updated_at",
+            "photos",
         ]
         read_only_fields = ["created_at", "updated_at", "slug", "author"]
 

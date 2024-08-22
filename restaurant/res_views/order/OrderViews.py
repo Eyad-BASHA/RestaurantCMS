@@ -130,4 +130,4 @@ class UpdateOrderView(generics.UpdateAPIView):
 
     def perform_update(self, serializer):
         instance = serializer.save()
-        instance.update_total_amount()  
+        instance.update_total_amount()

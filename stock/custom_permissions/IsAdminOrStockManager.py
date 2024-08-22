@@ -7,6 +7,12 @@ class IsAdminOrStockManager(permissions.BasePermission):
     """
 
     def has_permission(self, request, view):
+        # Allow GET, HEAD, or OPTIONS requests for any user
         if request.method in permissions.SAFE_METHODS:
             return True
-        retur
+
+        # Check if the user is an admin or a stock manager
+        return request.user and (
+            request.user.is_staff
+            or request.user.groups.filter(name="StockManager").exists()
+        )

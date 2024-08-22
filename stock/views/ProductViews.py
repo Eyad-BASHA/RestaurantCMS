@@ -1,5 +1,5 @@
 from rest_framework import generics, permissions
-from stock.custom_permissions import IsAdminOrStockManager
+from stock.custom_permissions.IsAdminOrStockManager import IsAdminOrStockManager
 from stock.models import Product
 from stock.serializers import ProductSerializer
 

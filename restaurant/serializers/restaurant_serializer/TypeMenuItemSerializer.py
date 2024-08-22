@@ -1,4 +1,4 @@
-from rest_framework import serializers
+from rest_framework import serializers, permissions
 from restaurant.models.restaurant import TypeMenuItem
 from restaurant.custom_permissions import IsAdminOrReadOnly
 from django.utils.text import slugify

@@ -64,7 +64,7 @@ class SplitPaymentView(APIView):
 
     def post(self, request, *args, **kwargs):
         order_id = request.data.get("order_id")
-        amounts = request.data.get("amounts") 
+        amounts = request.data.get("amounts")
         order = Order.objects.get(id=order_id)
 
         total_paid = 0

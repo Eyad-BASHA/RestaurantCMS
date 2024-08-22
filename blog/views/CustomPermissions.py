@@ -1,6 +1,8 @@
 from rest_framework import permissions
 
 
+
+
 class IsAdminOrModerator(permissions.BasePermission):
     """
     Custom permission to only allow admins or moderators to manage content.
