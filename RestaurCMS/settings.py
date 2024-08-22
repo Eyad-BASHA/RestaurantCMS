@@ -12,26 +12,35 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 import os
 from pathlib import Path
+import environ
+
+# Initialise environ
+env = environ.Env(DEBUG=(bool, False))
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Lisez le fichier .env
+environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-5b!025#4pd7+wh+v6k!&47g*_j$2$@iw6trl+t%7kqf*t8d0eh"
+SECRET_KEY = env("SECRET_KEY")
 
 
-STRIPE_PUBLIC_KEY = "pk_test_51PqFuO2KwOglEzQUQ2CNKw9IAJvO9Vx7RSvJ5joQbOwuJWfw9fWXFoSxgP03trVotFzST7dRcTJuXpn0IOnfY6Xc00ulBy2O1G"
-STRIPE_SECRET_KEY = "sk_test_51PqFuO2KwOglEzQUHKi2HAwaUVEgazDHw6NgiyjJyeEyOy5tGpBhZ4IBVjDRi8akW4TtKxilOxcJN6RXF87ZOdCX00ZRz63KLa"
+# Stripe API Keys
+STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY")
+STRIPE_PUBLIC_KEY = env("STRIPE_PUBLIC_KEY")
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env("DEBUG")
 
 ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
 
 
 # Application definition
@@ -154,6 +163,18 @@ DATABASES = {
     }
 }
 
+# Base de données
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": env("DB_NAME"),
+#         "USER": env("DB_USER"),
+#         "PASSWORD": env("DB_PASSWORD"),
+#         "HOST": env("DB_HOST", default="localhost"),
+#         "PORT": env("DB_PORT", default="5432"),
+#     }
+# }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -196,6 +217,14 @@ EMAIL_HOST_USER = "your-email@example.com"
 EMAIL_HOST_PASSWORD = "your-email-password"
 DEFAULT_FROM_EMAIL = "your-email@example.com"
 FRONTEND_URL = "http://your-frontend-url.com"
+
+
+# Email settings
+# EMAIL_HOST = env("EMAIL_HOST")
+# EMAIL_PORT = env("EMAIL_PORT")
+# EMAIL_HOST_USER = env("EMAIL_HOST_USER")
+# EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
+# EMAIL_USE_TLS = env.bool("EMAIL_USE_TLS", default=True)
 
 
 # Static files (CSS, JavaScript, Images)
