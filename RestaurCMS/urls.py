@@ -30,22 +30,25 @@ from dashboard.admin import custom_admin_site
 urlpatterns = [
     # path("myDashboard/", admin.site.urls),
     path("myDashboard/", custom_admin_site.urls),
+    path("dashboard/", include("dashboard.urls")),
     path("", views.home, name="home"),
-    path("api/schema/", SpectacularAPIView.as_view(), name="api-schema"),
+    path(
+        "api/user/",
+        include("account.urls"),
+    ),
+    path("api/stock/", include("stock.urls")),
+    path(
+        "api/restaurant/",
+        include("restaurant.urls"),
+    ),
+    path("api/remise/", include("remise.urls")),
+    path("api/blog/", include("blog.urls")),
     path(
         "api/docs/",
         SpectacularSwaggerView.as_view(url_name="api-schema"),
         name="api-docs",
     ),
-    path(
-        "api/user/",
-        include("account.urls"),
-    ),
-    path(
-        "api/restaurant/",
-        include("restaurant.urls"),
-    ),
-    path("dashboard/", include("dashboard.urls")),
+    path("api/schema/", SpectacularAPIView.as_view(), name="api-schema"),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

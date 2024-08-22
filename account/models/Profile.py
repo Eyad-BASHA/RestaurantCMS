@@ -5,6 +5,7 @@ from PIL import Image
 from account.models.AddressClient import AddressClient
 from account.models.CustomUser import CustomUser
 from common.models.TimeStampedModel import *
+from django.conf import settings
 
 
 class Profile(TimeStampedModel):
@@ -22,7 +23,7 @@ class Profile(TimeStampedModel):
     )
 
     user = models.OneToOneField(
-        CustomUser,
+        settings.AUTH_USER_MODEL,
         related_name="profile",
         on_delete=models.CASCADE,
         verbose_name=_("Utilisateur"),

@@ -22,7 +22,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from django.shortcuts import render
 from django.core.exceptions import ObjectDoesNotExist
-from .models.Profile import Profile
+from account.models.Profile import Profile
 
 
 class CreateUserView(generics.CreateAPIView):

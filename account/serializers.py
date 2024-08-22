@@ -8,31 +8,10 @@ from rest_framework import serializers
 from django.utils.translation import gettext as _
 import logging
 
+from account.models.AddressClient import AddressClient
+from account.models.Profile import Profile
+
 logger = logging.getLogger(__name__)
-
-
-class UserSerializer(serializers.ModelSerializer):
-    """Serializer for the users object"""
-
-    class Meta:
-        model = get_user_model()
-        fields = ("email", "password", "username")
-        extra_kwargs = {"password": {"write_only": True, "min_length": 5}}
-
-    def create(self, validated_data):
-        """Create a new user with encrypted password and return it"""
-        return get_user_model().objects.create_user(**validated_data)
-
-    def update(self, instance, validated_data):
-        """Update a user, setting the password correctly and return it"""
-        password = validated_data.pop("password", None)
-        user = super().update(instance, validated_data)
-
-        if password:
-            user.set_password(password)
-            user.save()
-
-        return user
 
 
 class AuthTokenSerializer(serializers.Serializer):
@@ -104,3 +83,113 @@ class PasswordResetSerializer(serializers.Serializer):
             settings.DEFAULT_FROM_EMAIL,
             [user.email],
         )
+
+
+class PasswordResetConfirmSerializer(serializers.Serializer):
+    password = serializers.CharField()
+    token = serializers.CharField()
+
+    def validate(self, attrs):
+        """Validate the password reset token"""
+        # This is a placeholder for actual implementation
+        return attrs
+
+
+class AddressClientSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AddressClient
+        fields = ["address_type", "street", "city", "zip_code", "country"]
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    addresses = AddressClientSerializer(many=True, required=False)
+
+    class Meta:
+        model = Profile
+        fields = [
+            "loyalty_number",
+            "gender",
+            "phone_number",
+            "bio",
+            "profile_image",
+            "date_of_birth",
+            "addresses",
+        ]
+
+    def create(self, validated_data):
+        addresses_data = validated_data.pop("addresses", [])
+        profile = Profile.objects.create(**validated_data)
+
+        for address_data in addresses_data:
+            address, created = AddressClient.objects.get_or_create(**address_data)
+            profile.addresses.add(address)
+
+        return profile
+
+    def update(self, instance, validated_data):
+        addresses_data = validated_data.pop("addresses", [])
+        instance.loyalty_number = validated_data.get(
+            "loyalty_number", instance.loyalty_number
+        )
+        instance.gender = validated_data.get("gender", instance.gender)
+        instance.phone_number = validated_data.get(
+            "phone_number", instance.phone_number
+        )
+        instance.bio = validated_data.get("bio", instance.bio)
+        instance.profile_image = validated_data.get(
+            "profile_image", instance.profile_image
+        )
+        instance.date_of_birth = validated_data.get(
+            "date_of_birth", instance.date_of_birth
+        )
+        instance.save()
+
+        instance.addresses.clear()
+        for address_data in addresses_data:
+            address, created = AddressClient.objects.get_or_create(**address_data)
+            instance.addresses.add(address)
+
+        return instance
+
+
+class UserSerializer(serializers.ModelSerializer):
+    """Serializer for the users object"""
+
+    profile = ProfileSerializer(required=False)
+
+    class Meta:
+        model = get_user_model()
+        fields = ("email", "password", "username", "profile")
+        extra_kwargs = {"password": {"write_only": True, "min_length": 8}}
+
+    def create(self, validated_data):
+        """Create a new user with encrypted password and return it"""
+        profile_data = validated_data.pop('profile', None)
+        user = get_user_model().objects.create_user(**validated_data)
+
+        if profile_data:
+            Profile.objects.create(user=user, **profile_data)
+
+        # return get_user_model().objects.create_user(**validated_data)
+        return user
+
+    def update(self, instance, validated_data):
+        """Update a user, setting the password correctly and return it"""
+
+        profile_data = validated_data.pop('profile', None)
+        user = super().update(instance, validated_data)
+
+        if profile_data:
+            profile = user.profile
+            for attr, value in profile_data.items():
+                setattr(profile, attr, value)
+            profile.save()
+
+        password = validated_data.pop("password", None)
+        user = super().update(instance, validated_data)
+
+        if "password" in validated_data:
+            user.set_password(validated_data["password"])
+            user.save()
+
+        return user

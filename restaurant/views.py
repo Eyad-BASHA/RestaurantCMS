@@ -28,12 +28,8 @@ def calculate_payment_amount(request):
         elif discount.discount_type == "fixed":
             amount -= discount.value
 
-    # Arrondir le montant à deux chiffres après la virgule
     amount = round(max(amount, 0), 2)
-
     return JsonResponse({"amount": amount})
-
-
 
 
 @csrf_exempt
