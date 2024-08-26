@@ -39,7 +39,11 @@ STRIPE_PUBLIC_KEY = env("STRIPE_PUBLIC_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env("DEBUG")
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+ALLOWED_HOSTS = [
+    "localhost", 
+    "127.0.0.1",
+    "cmsresto.com"
+    ]
 # ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
 
 

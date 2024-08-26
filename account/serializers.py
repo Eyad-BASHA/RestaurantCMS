@@ -167,7 +167,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     """Serializer for the users object"""
-
+    recaptcha_token = serializers.CharField(write_only=True, required=True)
     profile = ProfileSerializer(required=False)
     roles = serializers.PrimaryKeyRelatedField(queryset=Role.objects.all(), many=True)
     recaptcha_token = serializers.CharField(write_only=True, required=True)
@@ -187,6 +187,20 @@ class UserSerializer(serializers.ModelSerializer):
             "recaptcha_token",
         ]
         extra_kwargs = {"password": {"write_only": True, "min_length": 8}}
+
+
+    def validate_recaptcha_token(self, value):
+        response = requests.post(
+            'https://www.google.com/recaptcha/api/siteverify',
+            data={
+                'secret': settings.RECAPTCHA_PRIVATE_KEY,
+                'response': value
+            }
+        )
+        result = response.json()
+        if not result.get('success'):
+            raise serializers.ValidationError("Invalid reCAPTCHA. Please try again.")
+        return value
 
     def validate_recaptcha_token(self, value):
         """
