@@ -22,3 +22,11 @@ class PhotoMenuItemAdmin(admin.ModelAdmin):
     )
     readonly_fields = ["created_at", "updated_at"]
     ordering = ["-created_at"]
+
+    def save_model(self, request, obj, form, change):
+        if 'photo' in request.FILES:
+            print("File detected: ", request.FILES['photo'].name)
+        else:
+            print("No file detected")
+
+        super().save_model(request, obj, form, change)

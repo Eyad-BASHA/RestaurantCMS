@@ -2,16 +2,25 @@
 Serializers for the user API View.
 """
 
+from django.conf import settings
 from django.contrib.auth import get_user_model, authenticate
 from rest_framework import serializers
 
 from django.utils.translation import gettext as _
 import logging
+import requests
 
+from account.models import Role
 from account.models.AddressClient import AddressClient
 from account.models.Profile import Profile
 
 logger = logging.getLogger(__name__)
+
+
+class AddressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AddressClient
+        fields = ["address_type", "street", "city", "zip_code", "country"]
 
 
 class AuthTokenSerializer(serializers.Serializer):
@@ -122,7 +131,9 @@ class ProfileSerializer(serializers.ModelSerializer):
 
         for address_data in addresses_data:
             address, created = AddressClient.objects.get_or_create(**address_data)
-            profile.addresses.add(address)
+            profile.addresses.add(
+                address
+            )  
 
         return profile
 
@@ -144,10 +155,12 @@ class ProfileSerializer(serializers.ModelSerializer):
         )
         instance.save()
 
-        instance.addresses.clear()
+        instance.addresses.clear()  # Supprime les anciennes adresses
         for address_data in addresses_data:
             address, created = AddressClient.objects.get_or_create(**address_data)
-            instance.addresses.add(address)
+            instance.addresses.add(
+                address
+            )  # Ajoute l'adresse au profil après sa création
 
         return instance
 
@@ -156,28 +169,66 @@ class UserSerializer(serializers.ModelSerializer):
     """Serializer for the users object"""
 
     profile = ProfileSerializer(required=False)
+    roles = serializers.PrimaryKeyRelatedField(queryset=Role.objects.all(), many=True)
+    recaptcha_token = serializers.CharField(write_only=True, required=True)
 
     class Meta:
         model = get_user_model()
-        fields = ("email", "password", "username", "profile")
+        fields = [
+            "first_name",
+            "last_name",
+            "username",
+            "email",
+            "password",
+            "profile",
+            "roles",
+            "is_staff",
+            "is_active",
+            "recaptcha_token",
+        ]
         extra_kwargs = {"password": {"write_only": True, "min_length": 8}}
 
+    def validate_recaptcha_token(self, value):
+        """
+        Validate the reCAPTCHA token with Google's reCAPTCHA API.
+        """
+        recaptcha_response = requests.post(
+            'https://www.google.com/recaptcha/api/siteverify',
+            data={
+                'secret': settings.RECAPTCHA_PRIVATE_KEY,
+                'response': value
+            }
+        )
+        result = recaptcha_response.json()
+
+        if not result.get('success'):
+            raise serializers.ValidationError("Invalid reCAPTCHA. Please try again.")
+
+        return value
+
     def create(self, validated_data):
-        """Create a new user with encrypted password and return it"""
+        validated_data.pop("recaptcha_token", None)
         profile_data = validated_data.pop("profile", None)
+        roles_data = validated_data.pop("roles", [])
         user = get_user_model().objects.create_user(**validated_data)
+        user.roles.set(roles_data)
 
         if profile_data:
-            Profile.objects.create(user=user, **profile_data)
+            addresses_data = profile_data.pop("addresses", [])
+            profile = Profile.objects.create(user=user, **profile_data)
+            for address_data in addresses_data:
+                address, created = AddressClient.objects.get_or_create(**address_data)
+                profile.addresses.add(
+                    address
+                )  # Ajoute l'adresse au profil après sa création
 
-        # return get_user_model().objects.create_user(**validated_data)
         return user
 
     def update(self, instance, validated_data):
-        """Update a user, setting the password correctly and return it"""
-
         profile_data = validated_data.pop("profile", None)
+        roles_data = validated_data.pop("roles", [])
         user = super().update(instance, validated_data)
+        user.roles.set(roles_data)
 
         if profile_data:
             profile = user.profile
@@ -193,3 +244,9 @@ class UserSerializer(serializers.ModelSerializer):
             user.save()
 
         return user
+
+
+class RoleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Role
+        fields = ["id", "name", "description"]

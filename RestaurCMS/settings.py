@@ -39,7 +39,7 @@ STRIPE_PUBLIC_KEY = env("STRIPE_PUBLIC_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env("DEBUG")
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 # ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
 
 
@@ -66,6 +66,7 @@ INSTALLED_APPS = [
     "stock",
     "dashboard",
     "blog",
+    "corsheaders",
 ]
 
 REST_FRAMEWORK = {
@@ -109,6 +110,8 @@ SIMPLE_JWT = {
 #     },
 # }
 
+CORS_ALLOW_ALL_ORIGINS = True
+
 AUTHENTICATION_BACKENDS = [
     "account.backendsAuth.EmailOrUsernameModelBackend",
     "django.contrib.auth.backends.ModelBackend",
@@ -117,6 +120,7 @@ AUTHENTICATION_BACKENDS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -210,21 +214,18 @@ USE_TZ = True
 
 # Email settings
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "smtp.your-email-provider.com"
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = "your-email@example.com"
-EMAIL_HOST_PASSWORD = "your-email-password"
-DEFAULT_FROM_EMAIL = "your-email@example.com"
-FRONTEND_URL = "http://your-frontend-url.com"
+EMAIL_HOST = os.getenv("EMAIL_HOST")
+EMAIL_PORT = os.getenv("EMAIL_PORT")
+EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS")
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")  
+DEFAULT_FROM_EMAIL = os.getenv("EMAIL_HOST_PASSWORD")
 
 
-# Email settings
-# EMAIL_HOST = env("EMAIL_HOST")
-# EMAIL_PORT = env("EMAIL_PORT")
-# EMAIL_HOST_USER = env("EMAIL_HOST_USER")
-# EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
-# EMAIL_USE_TLS = env.bool("EMAIL_USE_TLS", default=True)
+# reCaptcha
+RECAPTCHA_PUBLIC_KEY = os.getenv("RECAPTCHA_PUBLIC_KEY")
+RECAPTCHA_PRIVATE_KEY = os.getenv("RECAPTCHA_PRIVATE_KEY")
+RECAPTCHA_USE_SSL = True  
 
 
 # Static files (CSS, JavaScript, Images)

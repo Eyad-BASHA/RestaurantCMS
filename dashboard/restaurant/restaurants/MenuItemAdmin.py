@@ -13,7 +13,8 @@ class PhotoMenuItemForm(forms.ModelForm):
         model = PhotoMenuItem
         fields = ["photo"]
         widgets = {
-            "photo": MultiImageInputForm(),
+            # "photo": MultiImageInputForm(),
+            "photo": forms.ClearableFileInput(),
         }
 
 class PhotoMenuItemInline(admin.TabularInline):

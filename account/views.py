@@ -1,12 +1,14 @@
 """
 Views for the user API
 """
-
+from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
 from django.http import HttpResponse
 from rest_framework import generics, authentication, permissions, status
-from .serializers import PasswordResetSerializer, UserSerializer, AuthTokenSerializer
+
+from account.models import Role
+from .serializers import PasswordResetSerializer, RoleSerializer, UserSerializer, AuthTokenSerializer
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.settings import api_settings
 from rest_framework.response import Response
@@ -71,9 +73,8 @@ class ManageUserView(generics.RetrieveUpdateAPIView):
     """Manage the authenticated user"""
 
     serializer_class = UserSerializer
-    # authentication_classes = [authentication.TokenAuthentication]
-    # permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
+    # authentication_classes = [JWTAuthentication]
+    authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
     def get_object(self):
@@ -103,3 +104,8 @@ def user_profile_view(request, user_id):
         "profile": profile,
     }
     return render(request, "user_profile.html", context)
+
+
+class RoleViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Role.objects.all()
+    serializer_class = RoleSerializer

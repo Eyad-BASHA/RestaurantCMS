@@ -38,15 +38,27 @@ class PhotoMenuItem(TimeStampedModel):
         return f"Image pour {self.menu_item.name}"
 
     # REDIMENSIONNER LA PHOTO
-    def save(
-        self, force_insert=False, force_update=False, using=None, update_fields=None
-    ):
-        super().save(force_insert, force_update, using, update_fields)
-        img = Image.open(self.photo.path)
-        if img.height > 500 or img.width > 500:
-            output_size = (500, 500)
-            img.thumbnail(output_size)
-            img.save(self.photo.path)
+    # def save(
+    #     self, force_insert=False, force_update=False, using=None, update_fields=None
+    # ):
+    #     super().save(force_insert, force_update, using, update_fields)
+    #     img = Image.open(self.photo.path)
+    #     if img.height > 500 or img.width > 500:
+    #         output_size = (500, 500)
+    #         img.thumbnail(output_size)
+    #         img.save(self.photo.path)
+
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        try:
+            img = Image.open(self.photo.path)
+            if img.height > 500 or img.width > 500:
+                output_size = (500, 500)
+                img.thumbnail(output_size)
+                img.save(self.photo.path)
+        except Exception as e:
+            print(f"Error resizing image: {e}")
 
     class Meta:
         verbose_name = _("Photo d'élément de menu")
