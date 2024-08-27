@@ -42,7 +42,11 @@ DEBUG = env("DEBUG")
 ALLOWED_HOSTS = [
     "localhost", 
     "127.0.0.1",
-    "cmsresto.com"
+    "cmsresto.com",
+    "https://cmsresto.com",
+    "www.cmsresto.com",
+    "https://www.cmsresto.com",
+    "https://cmsresto-255gif70u-eyads-projects-2842c075.vercel.app/"
     ]
 # ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
 
